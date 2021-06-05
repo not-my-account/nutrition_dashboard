@@ -9,7 +9,8 @@ import os
 import pandas as pd
 import requests
 
-api_key = input() # get key from https://fdc.nal.usda.gov/api-key-signup.html
+# get key from https://fdc.nal.usda.gov/api-key-signup.html
+api_key = input()
 url = 'https://api.nal.usda.gov/fdc/v1/foods?api_key='+api_key
 
 r = requests.get('https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_survey_food_csv_2020-10-30.zip', allow_redirects=True)
