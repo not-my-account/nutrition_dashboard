@@ -9,7 +9,7 @@ import os
 import pandas as pd
 import requests
 
-# get key from https://fdc.nal.usda.gov/api-key-signup.html
+# get key from https://fdc.nal.usda.gov/api-key-signup.html (url might be bugged at the moment)
 api_key = input()
 url = 'https://api.nal.usda.gov/fdc/v1/foods?api_key='+api_key
 
