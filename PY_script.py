@@ -28,11 +28,11 @@ foods = pd.read_csv('food.csv')
 foods = foods[['fdc_id', 'description']]
 foods = foods.rename(columns={'description': 'Description'})
 
+# set and load data on three food items to test the code
 data = {"fdcIds": [1100417, 1103276, 1102653],
         "format": "abridged"}
 r = requests.post(url, json=data)
 
-# format data from request to dataframe
 nutrients = [n['name'] for n in r.json()[0]['foodNutrients']]
 data = pd.DataFrame(columns=['Food Name']+nutrients)
 
@@ -85,7 +85,7 @@ nutrient_selector_callback = CustomJS(args=dict(original_data=original_data, col
 
 nutrient_selector = MultiChoice(value=initial_nutrients, options=nutrients)
 nutrient_selector.js_on_change('value', nutrient_selector_callback)
-# nutrient_selector.js_link('value', nutrient_table.columns)
+# nutrient_selector.js_link('value', nutrient_table.columns) # to to dynamically adjust the displayed columns?
 
 output_file("nutrition_dashboard.html")
 show(column(foods_table, nutrient_selector, nutrient_table))
