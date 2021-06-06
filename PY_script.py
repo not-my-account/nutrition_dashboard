@@ -45,10 +45,6 @@ for i in r.json():
     data = data.append(food_info, ignore_index=True)
 
 # create dashboard
-foods_source = ColumnDataSource(foods)
-foods_columns = [TableColumn(field=Ci, title=Ci) for Ci in foods.columns]
-foods_table = DataTable(columns=foods_columns, source=foods_source, index_position=None, selectable='checkbox')
-
 initial_nutrients = nutrients[:4]
 
 original_data = ColumnDataSource(data)
@@ -83,9 +79,10 @@ nutrient_selector_callback = CustomJS(args=dict(original_data=original_data, col
     source.change.emit();
 """)
 
+food_selector = MultiChoice(value=[], options=list(foods['Description']))
 nutrient_selector = MultiChoice(value=initial_nutrients, options=nutrients)
 nutrient_selector.js_on_change('value', nutrient_selector_callback)
 # nutrient_selector.js_link('value', nutrient_table.columns) # to to dynamically adjust the displayed columns?
 
 output_file("nutrition_dashboard.html")
-show(column(foods_table, nutrient_selector, nutrient_table))
+show(column(food_selector, nutrient_selector, nutrient_table))
