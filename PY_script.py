@@ -1,7 +1,8 @@
+# https://github.com/not-my-account/nutrition_dashboard
 # import code modules
 from bokeh.io import output_file, show
 from bokeh.layouts import column, row
-from bokeh.models import ColumnDataSource, CustomJS, MultiChoice
+from bokeh.models import Button, ColumnDataSource, CustomJS, MultiChoice
 from bokeh.models.widgets import DataTable, TableColumn
 from zipfile import ZipFile
 
@@ -9,7 +10,7 @@ import os
 import pandas as pd
 import requests
 
-# get key from https://fdc.nal.usda.gov/api-key-signup.html (url might be bugged at the moment)
+# get key from https://fdc.nal.usda.gov/api-key-signup.html
 api_key = input()
 url = 'https://api.nal.usda.gov/fdc/v1/foods?api_key='+api_key
 
@@ -51,7 +52,7 @@ original_data = ColumnDataSource(data)
 source = ColumnDataSource(data[['Food Name']+initial_nutrients])
 
 columns = [TableColumn(field=Ci, title=Ci) for Ci in ['Food Name']+nutrients] # bokeh columns
-nutrient_table = DataTable(columns=columns, source=source, index_position=None) # bokeh table
+nutrient_table = DataTable(columns=columns, source=source, index_position=None, frozen_columns=1) # bokeh table
 
 nutrient_selector_callback = CustomJS(args=dict(original_data=original_data, columns=columns, source=source), code="""    
     var original = original_data.data;
@@ -82,7 +83,9 @@ nutrient_selector_callback = CustomJS(args=dict(original_data=original_data, col
 food_selector = MultiChoice(value=[], options=list(foods['Description']))
 nutrient_selector = MultiChoice(value=initial_nutrients, options=nutrients)
 nutrient_selector.js_on_change('value', nutrient_selector_callback)
-# nutrient_selector.js_link('value', nutrient_table.columns) # to to dynamically adjust the displayed columns?
 
 output_file("nutrition_dashboard.html")
 show(column(food_selector, nutrient_selector, nutrient_table))
+
+# https://docs.bokeh.org/en/latest/docs/user_guide/interaction/linking.html
+# https://stackoverflow.com/questions/32418045/running-python-code-by-clicking-a-button-in-bokeh
